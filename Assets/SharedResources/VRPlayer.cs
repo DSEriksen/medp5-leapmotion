@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class VRPlayer : MonoBehaviour {
     private CharacterController controller;
+    public Transform cameraTransform;
     private CsvLogger<Vector4> collisionLogger = new CsvLogger<Vector4> ("collisions", "x,y,z,t", vec => vec.x + "," + vec.y + "," + vec.z + "," + vec.w);
     private float timer;
     private bool move, rotate;
     private float speed;
     private float turnSpeed;
-
+    private Vector3 moveDirection = Vector3.zero;
 
     void Start () {
         controller = GetComponent<CharacterController> ();
@@ -43,24 +44,27 @@ public class VRPlayer : MonoBehaviour {
         }
 
         if (move) {
-            Vector3 velocity = transform.forward * speed;
-            controller.SimpleMove (velocity);
-        }
-        if (rotate) {
-            transform.Rotate (0, turnSpeed * Time.deltaTime, 0);
+
+            moveDirection = new Vector3(0, 0, speed);
+            moveDirection = cameraTransform.TransformDirection(moveDirection);
+            controller.SimpleMove (moveDirection);
         }
 
+        if (rotate) {
+            transform.Rotate (0, turnSpeed * Time.deltaTime, 0);
+            Debug.Log ("rotating");
+        }
 
     }
 
     public void moveController (string caseswitch) {
-        switch(caseswitch){
+        switch (caseswitch) {
             case "forward":
                 speed = 5f;
                 move = true;
                 break;
             case "backward":
-                speed = -5f;
+                speed = -2f;
                 move = true;
                 break;
             case "stop":
@@ -68,24 +72,25 @@ public class VRPlayer : MonoBehaviour {
                 break;
             default:
                 break;
-            
+
         }
     }
 
     public void rotateController (string caseswitch) {
-        switch(caseswitch){
+        Debug.Log ("got " + caseswitch + " command");
+        switch (caseswitch) {
             case "left":
-                turnSpeed = -90f;
+                turnSpeed = -60f;
                 rotate = true;
                 break;
             case "right":
-                turnSpeed = 90f;
+                turnSpeed = 60f;
                 rotate = true;
                 break;
             case "stop":
                 rotate = false;
                 break;
-            default: 
+            default:
                 break;
         }
     }
