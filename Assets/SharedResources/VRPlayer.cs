@@ -25,23 +25,7 @@ public class VRPlayer : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        timer -= Time.deltaTime;
 
-        if (timer < 0) {
-            if ((controller.collisionFlags & CollisionFlags.Sides) != 0) {
-                timer = 2.0f;
-                Debug.Log ("Collide with wall.");
-
-                Vector4 point = new Vector4 (
-                    transform.position.x,
-                    transform.position.y,
-                    transform.position.z,
-                    Time.time
-                );
-
-                collisionLogger.Log (point);
-            }
-        }
 
         if (move) {
 

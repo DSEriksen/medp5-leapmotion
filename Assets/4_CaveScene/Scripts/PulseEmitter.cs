@@ -63,6 +63,7 @@ public class PulseEmitter : MonoBehaviour {
 
 		if (fingersExtended && canEmit){
 			EmitSound(200f, 5f);
+			audioSource.Play();
 			canEmit = false;
 		}
 
